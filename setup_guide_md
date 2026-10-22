@@ -1,0 +1,167 @@
+# 🏥 Hospital Management System — Setup Guide
+
+## What's Included
+| File           | Purpose                                      |
+|----------------|----------------------------------------------|
+| `hospital_db.sql` | MySQL database schema + sample data       |
+| `index.html`   | Full web frontend (no server needed)         |
+
+---
+
+## ✅ Step 1 — Install MySQL
+
+### Windows
+1. Download **MySQL Installer** from https://dev.mysql.com/downloads/installer/
+2. Run the installer → choose **Developer Default**
+3. Set a root password (remember it!)
+
+### macOS
+```bash
+brew install mysql
+brew services start mysql
+```
+
+### Ubuntu/Linux
+```bash
+sudo apt update
+sudo apt install mysql-server -y
+sudo mysql_secure_installation
+```
+
+---
+
+## ✅ Step 2 — Import the Database
+
+### Option A — MySQL Command Line
+```bash
+mysql -u root -p < hospital_db.sql
+```
+Enter your root password when prompted.
+
+### Option B — MySQL Workbench (GUI)
+1. Open MySQL Workbench
+2. Connect to your local server
+3. Go to **File → Run SQL Script**
+4. Select `hospital_db.sql`
+5. Click **Run**
+
+---
+
+## ✅ Step 3 — Verify the Database
+
+Open MySQL shell and run:
+```sql
+USE HospitalDB;
+SHOW TABLES;
+SELECT * FROM Patient;
+SELECT * FROM Doctor;
+```
+
+You should see 10 tables and sample data populated.
+
+---
+
+## ✅ Step 4 — Run the Web Frontend
+
+The frontend is a **standalone HTML file** — no server needed!
+
+1. Double-click `index.html`  
+   OR  
+   Drag it into any browser (Chrome, Firefox, Edge)
+
+That's it — the full system opens instantly. ✅
+
+---
+
+## 🗂️ Database Tables
+
+| Table        | Description                        |
+|--------------|------------------------------------|
+| Department   | Hospital departments               |
+| Doctor       | Doctor profiles                    |
+| Patient      | Patient records                    |
+| Room         | Room inventory & status            |
+| Admission    | Patient admissions                 |
+| Appointment  | Scheduled appointments             |
+| Medicine     | Drug inventory                     |
+| Prescription | Doctor prescriptions               |
+| Bill         | Billing & payment records          |
+| Staff        | Nurses, lab techs, admin staff     |
+
+---
+
+## 🔗 Connect Frontend to MySQL (Optional Advanced Step)
+
+To connect the HTML frontend to live MySQL data, use a backend:
+
+### Python + Flask (Recommended)
+```bash
+pip install flask flask-cors mysql-connector-python
+```
+
+Create `app.py`:
+```python
+from flask import Flask, jsonify
+import mysql.connector
+from flask_cors import CORS
+
+app = Flask(__name__)
+CORS(app)
+
+def get_db():
+    return mysql.connector.connect(
+        host="localhost", user="root",
+        password="YOUR_PASSWORD", database="HospitalDB"
+    )
+
+@app.route('/patients')
+def patients():
+    db = get_db()
+    cur = db.cursor(dictionary=True)
+    cur.execute("SELECT * FROM Patient")
+    return jsonify(cur.fetchall())
+
+if __name__ == '__main__':
+    app.run(debug=True)
+```
+
+Run it:
+```bash
+python app.py
+```
+
+Then fetch data in the HTML:
+```javascript
+fetch('http://localhost:5000/patients')
+  .then(r => r.json())
+  .then(data => console.log(data));
+```
+
+---
+
+## 📌 Quick SQL Queries to Try
+
+```sql
+-- All admitted patients
+SELECT p.name, d.name AS doctor, r.room_number
+FROM Admission a
+JOIN Patient p ON a.patient_id = p.patient_id
+JOIN Doctor  d ON a.doctor_id  = d.doctor_id
+JOIN Room    r ON a.room_id    = r.room_id
+WHERE a.status = 'Admitted';
+
+-- Total revenue from bills
+SELECT SUM(total_amount) AS Total_Revenue FROM Bill;
+
+-- Available rooms
+SELECT room_number, room_type, charges_per_day
+FROM Room WHERE status = 'Available';
+
+-- Upcoming appointments
+SELECT p.name, d.name AS doctor, appt_date, appt_time
+FROM Appointment a
+JOIN Patient p ON a.patient_id = p.patient_id
+JOIN Doctor  d ON a.doctor_id  = d.doctor_id
+WHERE a.status = 'Scheduled'
+ORDER BY appt_date, appt_time;
+```
