@@ -1,0 +1,1410 @@
+<!DOCTYPE html>
+<!-- saved from url=(0045)file:///C:/Users/ASYUS/Downloads/index_1.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MediCare HMS</title>
+<link href="./MediCare HMS_files/css2" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════
+   TOKENS — PURPLE NEOMORPHIC GLASS
+═══════════════════════════════════════════ */
+:root{
+  /* Base */
+  --bg:        #12091f;
+  --surface:   #1a1030;
+  --surface2:  #1f143a;
+
+  /* Purple palette */
+  --p1:#7c3aed;   /* vivid violet */
+  --p2:#9d5cf6;   /* medium purple */
+  --p3:#c084fc;   /* light purple */
+  --p4:#e9d5ff;   /* lavender */
+  --p-glow:rgba(124,58,237,.45);
+  --p-soft:rgba(124,58,237,.18);
+  --p-rim: rgba(157,92,246,.35);
+
+  /* Accents */
+  --teal:  #2dd4bf;
+  --pink:  #f472b6;
+  --amber: #fbbf24;
+  --red:   #f87171;
+  --green: #34d399;
+
+  /* Glass */
+  --glass:        rgba(255,255,255,.055);
+  --glass-hover:  rgba(255,255,255,.09);
+  --glass-border: rgba(255,255,255,.10);
+  --glass-shine:  rgba(255,255,255,.14);
+
+  /* Neomorphic shadows (dark purple bg) */
+  --neo-out:  6px 6px 14px rgba(0,0,0,.55), -4px -4px 10px rgba(80,40,140,.18);
+  --neo-in:   inset 4px 4px 10px rgba(0,0,0,.5), inset -3px -3px 8px rgba(80,40,140,.15);
+  --neo-card: 8px 8px 20px rgba(0,0,0,.6), -5px -5px 14px rgba(80,40,140,.14);
+
+  /* Text */
+  --text:      #ede9fe;
+  --text-sec:  #a78bfa;
+  --text-muted:#7c6fa5;
+  --text-dim:  #4e4270;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:'Inter',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;overflow-x:hidden;
+}
+
+/* ── Ambient glow blobs ── */
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 55% 45% at 5%  15%, rgba(124,58,237,.22) 0%,transparent 65%),
+    radial-gradient(ellipse 40% 50% at 95% 85%, rgba(157,92,246,.16) 0%,transparent 60%),
+    radial-gradient(ellipse 35% 40% at 50% 55%, rgba(244,114,182,.06) 0%,transparent 65%);
+}
+
+/* ═══════════════════════════════════════════
+   SIDEBAR
+═══════════════════════════════════════════ */
+.sidebar{
+  position:fixed;left:0;top:0;width:258px;height:100vh;z-index:100;
+  display:flex;flex-direction:column;
+  /* Neomorphic sidebar panel */
+  background:linear-gradient(160deg, #1c1135 0%, #150d28 100%);
+  box-shadow: 4px 0 28px rgba(0,0,0,.6), inset -1px 0 0 rgba(157,92,246,.2);
+  border-right:1px solid rgba(157,92,246,.15);
+}
+
+.sidebar-logo{
+  padding:26px 22px 18px;
+  border-bottom:1px solid rgba(157,92,246,.15);
+}
+.logo-wrap{
+  display:flex;align-items:center;gap:12px;margin-bottom:0;
+}
+.logo-icon{
+  width:44px;height:44px;border-radius:14px;flex-shrink:0;
+  background:linear-gradient(135deg,var(--p1),var(--p2));
+  display:flex;align-items:center;justify-content:center;font-size:1.3rem;
+  box-shadow:0 0 22px var(--p-glow), var(--neo-out);
+}
+.logo-text h1{
+  font-family:'Syne',sans-serif;font-size:1.15rem;font-weight:800;
+  background:linear-gradient(135deg,#fff 0%,var(--p3) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.logo-text span{font-size:.68rem;color:var(--text-muted);letter-spacing:.1em;text-transform:uppercase}
+
+.nav{flex:1;padding:8px 10px;overflow-y:auto}
+.nav::-webkit-scrollbar{width:3px}
+.nav::-webkit-scrollbar-thumb{background:rgba(157,92,246,.3);border-radius:2px}
+
+.nav-section{
+  font-size:.62rem;font-weight:700;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--text-dim);padding:16px 12px 5px;
+}
+.nav-item{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 14px;border-radius:12px;cursor:pointer;
+  font-size:.845rem;font-weight:500;color:var(--text-muted);
+  transition:all .22s;margin-bottom:3px;
+  border:1px solid transparent;position:relative;overflow:hidden;
+}
+.nav-item::before{
+  content:'';position:absolute;inset:0;border-radius:12px;opacity:0;
+  background:linear-gradient(135deg,rgba(124,58,237,.25),rgba(157,92,246,.12));
+  transition:opacity .22s;
+}
+.nav-item:hover::before{opacity:1}
+.nav-item:hover{color:var(--p4);border-color:rgba(157,92,246,.2)}
+.nav-item.active{
+  color:#fff;
+  border-color:rgba(157,92,246,.45);
+  /* Neomorphic pressed look + glass fill */
+  background:linear-gradient(135deg,rgba(124,58,237,.28),rgba(157,92,246,.14));
+  box-shadow: inset 2px 2px 6px rgba(0,0,0,.4), inset -1px -1px 4px rgba(157,92,246,.2),
+              0 0 18px rgba(124,58,237,.2);
+}
+.nav-item.active::before{opacity:0}
+.nav-icon{font-size:.9rem;width:18px;text-align:center;flex-shrink:0}
+.nav-pip{
+  width:5px;height:5px;border-radius:50%;margin-left:auto;flex-shrink:0;
+  background:var(--p2);box-shadow:0 0 7px var(--p2);
+}
+
+.sidebar-footer{
+  padding:14px 18px;border-top:1px solid rgba(157,92,246,.15);
+}
+.user-card{
+  display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;
+  background:rgba(124,58,237,.12);border:1px solid rgba(157,92,246,.2);
+  box-shadow:var(--neo-in);
+}
+.user-av{
+  width:32px;height:32px;border-radius:9px;flex-shrink:0;
+  background:linear-gradient(135deg,var(--p1),var(--pink));
+  display:flex;align-items:center;justify-content:center;
+  font-size:.82rem;font-weight:700;color:#fff;
+  box-shadow:0 0 10px var(--p-glow);
+}
+.user-name{font-size:.8rem;font-weight:600;color:var(--text)}
+.user-role{font-size:.68rem;color:var(--text-muted)}
+
+/* ═══════════════════════════════════════════
+   TOPBAR
+═══════════════════════════════════════════ */
+.main{margin-left:258px;min-height:100vh;position:relative;z-index:1}
+.topbar{
+  padding:14px 28px;display:flex;justify-content:space-between;align-items:center;
+  /* Glass topbar */
+  background:rgba(18,9,31,.78);
+  backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);
+  border-bottom:1px solid rgba(157,92,246,.18);
+  position:sticky;top:0;z-index:50;
+}
+.topbar-title{
+  font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:800;
+  background:linear-gradient(90deg,#fff 0%,var(--p3) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.topbar-sub{font-size:.71rem;color:var(--text-muted);margin-top:2px}
+.topbar-right{display:flex;gap:8px;align-items:center}
+
+/* Neomorphic icon buttons */
+.neo-btn{
+  width:36px;height:36px;border-radius:10px;
+  background:linear-gradient(145deg,#1e1538,#130d25);
+  border:1px solid rgba(157,92,246,.18);
+  box-shadow:var(--neo-out);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;font-size:.95rem;color:var(--text-muted);transition:all .2s;
+}
+.neo-btn:hover{color:var(--p3);box-shadow:0 0 14px var(--p-glow),var(--neo-out)}
+.online-chip{
+  padding:5px 13px;border-radius:20px;font-size:.73rem;font-weight:700;
+  background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.3);
+  color:var(--green);letter-spacing:.03em;
+}
+
+.content{padding:24px 28px}
+
+/* ═══════════════════════════════════════════
+   PAGES
+═══════════════════════════════════════════ */
+.page{display:none;animation:fadeUp .3s ease}
+.page.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+/* ═══════════════════════════════════════════
+   STAT CARDS  (Neomorphic + Glass)
+═══════════════════════════════════════════ */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:22px}
+.stat-card{
+  padding:20px 18px;border-radius:18px;position:relative;overflow:hidden;
+  /* Neomorphic base */
+  background:linear-gradient(145deg,#1e1538,#160f2c);
+  box-shadow:var(--neo-card);
+  border:1px solid rgba(157,92,246,.12);
+  transition:transform .22s,box-shadow .22s;
+}
+.stat-card:hover{transform:translateY(-4px);box-shadow:0 16px 40px rgba(0,0,0,.6),0 0 30px var(--glow-color,var(--p-glow))}
+/* Glass shimmer strip on top */
+.stat-card::after{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--rim-color,rgba(157,92,246,.5)),transparent);
+}
+.stat-card.s-purple{--glow-color:rgba(124,58,237,.4);--rim-color:rgba(157,92,246,.5)}
+.stat-card.s-teal  {--glow-color:rgba(45,212,191,.3);--rim-color:rgba(45,212,191,.5)}
+.stat-card.s-pink  {--glow-color:rgba(244,114,182,.3);--rim-color:rgba(244,114,182,.5)}
+.stat-card.s-amber {--glow-color:rgba(251,191,36,.3); --rim-color:rgba(251,191,36,.5)}
+
+.stat-icon-pill{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:40px;height:40px;border-radius:12px;font-size:1.2rem;margin-bottom:14px;
+  /* Neomorphic inset pill */
+  box-shadow:var(--neo-in);
+}
+.s-purple .stat-icon-pill{background:rgba(124,58,237,.22)}
+.s-teal   .stat-icon-pill{background:rgba(45,212,191,.15)}
+.s-pink   .stat-icon-pill{background:rgba(244,114,182,.15)}
+.s-amber  .stat-icon-pill{background:rgba(251,191,36,.15)}
+
+.stat-num{
+  font-family:'Syne',sans-serif;font-size:2.1rem;font-weight:800;line-height:1;margin-bottom:4px;
+}
+.s-purple .stat-num{background:linear-gradient(135deg,#fff,var(--p3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.s-teal   .stat-num{background:linear-gradient(135deg,#fff,var(--teal));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.s-pink   .stat-num{background:linear-gradient(135deg,#fff,var(--pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.s-amber  .stat-num{background:linear-gradient(135deg,#fff,var(--amber));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.stat-label{font-size:.78rem;color:var(--text-muted);font-weight:500}
+.stat-sub{font-size:.68rem;margin-top:7px;font-weight:600;opacity:.8}
+.s-purple .stat-sub{color:var(--p3)}
+.s-teal   .stat-sub{color:var(--teal)}
+.s-pink   .stat-sub{color:var(--pink)}
+.s-amber  .stat-sub{color:var(--amber)}
+
+/* ═══════════════════════════════════════════
+   GLASS TABLE CARDS
+═══════════════════════════════════════════ */
+.section-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.section-title{
+  font-family:'Syne',sans-serif;font-size:1rem;font-weight:800;color:var(--text);
+  display:flex;align-items:center;gap:8px;
+}
+.section-title::before{
+  content:'';display:inline-block;width:4px;height:16px;border-radius:3px;
+  background:linear-gradient(to bottom,var(--p1),var(--pink));
+}
+
+.table-wrap{
+  /* Glassmorphism card */
+  background:rgba(255,255,255,.035);
+  backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);
+  border:1px solid var(--glass-border);
+  border-radius:18px;overflow:hidden;
+  /* Subtle neomorphic shadow underneath */
+  box-shadow: 0 8px 32px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.07);
+  margin-bottom:22px;
+}
+table{width:100%;border-collapse:collapse}
+thead tr{background:rgba(124,58,237,.1)}
+th{
+  padding:12px 15px;text-align:left;
+  font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--text-sec);border-bottom:1px solid rgba(157,92,246,.18);
+}
+td{
+  padding:12px 15px;font-size:.83rem;color:var(--text);
+  border-bottom:1px solid rgba(255,255,255,.04);
+}
+tbody tr:last-child td{border-bottom:none}
+tbody tr{transition:background .15s}
+tbody tr:hover td{background:rgba(124,58,237,.07)}
+td strong{color:#fff;font-weight:600}
+
+/* ═══════════════════════════════════════════
+   BUTTONS
+═══════════════════════════════════════════ */
+.btn{
+  padding:8px 16px;border-radius:10px;border:none;cursor:pointer;
+  font-family:'Inter',sans-serif;font-weight:600;font-size:.81rem;
+  transition:all .2s;display:inline-flex;align-items:center;gap:5px;
+}
+/* Primary — neomorphic purple */
+.btn-primary{
+  background:linear-gradient(135deg,var(--p1),var(--p2));
+  color:#fff;
+  box-shadow:0 4px 18px var(--p-glow), 3px 3px 8px rgba(0,0,0,.4);
+}
+.btn-primary:hover{
+  box-shadow:0 6px 24px var(--p-glow), 3px 3px 8px rgba(0,0,0,.4);
+  transform:translateY(-1px);
+}
+.btn-red{
+  background:rgba(248,113,113,.1);color:var(--red);
+  border:1px solid rgba(248,113,113,.28);
+  box-shadow:2px 2px 6px rgba(0,0,0,.3);
+}
+.btn-red:hover{background:rgba(248,113,113,.2);transform:translateY(-1px)}
+.btn-green{
+  background:rgba(52,211,153,.1);color:var(--green);
+  border:1px solid rgba(52,211,153,.28);
+  box-shadow:2px 2px 6px rgba(0,0,0,.3);
+}
+.btn-green:hover{background:rgba(52,211,153,.2);transform:translateY(-1px)}
+.btn-ghost{
+  background:rgba(255,255,255,.05);color:var(--text-muted);
+  border:1px solid var(--glass-border);
+  box-shadow:2px 2px 5px rgba(0,0,0,.25);
+}
+.btn-ghost:hover{background:rgba(255,255,255,.09);color:var(--text)}
+.btn-sm{padding:4px 10px;font-size:.73rem;border-radius:8px}
+
+/* ═══════════════════════════════════════════
+   CHIPS
+═══════════════════════════════════════════ */
+.chip{
+  display:inline-flex;align-items:center;gap:4px;
+  border-radius:20px;padding:3px 9px;font-size:.7rem;font-weight:700;
+  letter-spacing:.02em;
+  /* Neomorphic inset look */
+  box-shadow:inset 1px 1px 3px rgba(0,0,0,.3);
+}
+.chip::before{content:'';width:4px;height:4px;border-radius:50%;background:currentColor;flex-shrink:0}
+.chip-green {background:rgba(52,211,153,.12); color:var(--green);border:1px solid rgba(52,211,153,.3)}
+.chip-red   {background:rgba(248,113,113,.12);color:var(--red);  border:1px solid rgba(248,113,113,.3)}
+.chip-yellow{background:rgba(251,191,36,.12); color:var(--amber); border:1px solid rgba(251,191,36,.3)}
+.chip-blue  {background:rgba(45,212,191,.12); color:var(--teal);  border:1px solid rgba(45,212,191,.3)}
+.chip-cyan  {background:rgba(45,212,191,.12); color:var(--teal);  border:1px solid rgba(45,212,191,.3)}
+.chip-purple{background:rgba(192,132,252,.15);color:var(--p3);   border:1px solid rgba(192,132,252,.35)}
+.chip-grey  {background:rgba(124,111,165,.1); color:var(--text-muted);border:1px solid rgba(124,111,165,.2)}
+.chip-pink  {background:rgba(244,114,182,.12);color:var(--pink);  border:1px solid rgba(244,114,182,.3)}
+
+/* ═══════════════════════════════════════════
+   SEARCH BAR  (Neomorphic input)
+═══════════════════════════════════════════ */
+.search-bar{display:flex;gap:12px;margin-bottom:16px}
+.search-wrap{flex:1;position:relative}
+.search-wrap::before{
+  content:'🔍';position:absolute;left:13px;top:50%;transform:translateY(-50%);
+  font-size:.8rem;pointer-events:none;z-index:1;
+}
+.search-input{
+  width:100%;padding:9px 15px 9px 38px;
+  background:linear-gradient(145deg,#160f2c,#1e1538);
+  border:1px solid rgba(157,92,246,.22);
+  border-radius:12px;color:var(--text);
+  font-size:.845rem;font-family:'Inter',sans-serif;
+  box-shadow:var(--neo-in);
+  transition:all .22s;
+}
+.search-input:focus{
+  outline:none;
+  border-color:rgba(157,92,246,.55);
+  box-shadow:var(--neo-in),0 0 0 3px rgba(124,58,237,.15);
+}
+.search-input::placeholder{color:var(--text-dim)}
+
+/* ═══════════════════════════════════════════
+   DASHBOARD GRID
+═══════════════════════════════════════════ */
+.dash-grid{display:grid;grid-template-columns:3fr 2fr;gap:18px}
+.widget-label{
+  padding:15px 16px 0;margin-bottom:10px;
+  font-size:.72rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--text-sec);display:flex;justify-content:space-between;
+}
+.widget-label a{
+  font-size:.68rem;color:var(--p3);text-transform:none;
+  letter-spacing:0;font-weight:500;cursor:pointer;
+  opacity:.8;
+}
+.widget-label a:hover{opacity:1}
+
+/* ═══════════════════════════════════════════
+   ROOM CARDS  (Neomorphic glass)
+═══════════════════════════════════════════ */
+.room-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}
+.room-card{
+  border-radius:18px;padding:22px;text-align:center;
+  position:relative;overflow:hidden;
+  transition:transform .22s,box-shadow .22s;
+  /* Neomorphic base */
+  background:linear-gradient(145deg,#1e1538,#160f2c);
+  box-shadow:var(--neo-card);
+}
+/* Glass colour overlay */
+.room-card::before{
+  content:'';position:absolute;inset:0;border-radius:18px;
+  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  transition:opacity .2s;
+}
+/* Top rim */
+.room-card::after{
+  content:'';position:absolute;top:0;left:10%;right:10%;height:2px;border-radius:18px 18px 0 0;
+}
+.room-card.available{border:1px solid rgba(52,211,153,.3)}
+.room-card.available::before{background:rgba(52,211,153,.05)}
+.room-card.available::after{background:linear-gradient(90deg,transparent,var(--green),transparent)}
+.room-card.occupied{border:1px solid rgba(248,113,113,.3)}
+.room-card.occupied::before{background:rgba(248,113,113,.05)}
+.room-card.occupied::after{background:linear-gradient(90deg,transparent,var(--red),transparent)}
+.room-card.maintenance{border:1px solid rgba(251,191,36,.3)}
+.room-card.maintenance::before{background:rgba(251,191,36,.05)}
+.room-card.maintenance::after{background:linear-gradient(90deg,transparent,var(--amber),transparent)}
+.room-card:hover{transform:translateY(-5px);box-shadow:0 20px 50px rgba(0,0,0,.6)}
+.room-num{
+  font-family:'Syne',sans-serif;font-size:2.2rem;font-weight:800;
+  background:linear-gradient(135deg,#fff,var(--p3));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  line-height:1;margin-bottom:4px;position:relative;z-index:1;
+}
+.room-type{font-size:.76rem;color:var(--text-muted);font-weight:500;margin-bottom:8px;position:relative;z-index:1}
+.room-rate{
+  font-size:.88rem;font-weight:700;margin-bottom:12px;position:relative;z-index:1;
+  color:var(--p3);
+}
+.room-card .chip{position:relative;z-index:1}
+
+/* ═══════════════════════════════════════════
+   MODAL  (Glass + Neomorphic frame)
+═══════════════════════════════════════════ */
+.modal-overlay{
+  position:fixed;inset:0;z-index:999;
+  background:rgba(8,4,18,.72);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;pointer-events:none;transition:opacity .25s;
+}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal{
+  width:590px;max-width:95vw;max-height:90vh;overflow-y:auto;
+  padding:28px;border-radius:22px;
+  /* Glass panel */
+  background:rgba(26,16,48,.88);
+  backdrop-filter:blur(28px);-webkit-backdrop-filter:blur(28px);
+  border:1px solid rgba(157,92,246,.3);
+  /* Neomorphic depth */
+  box-shadow: 0 30px 80px rgba(0,0,0,.7),
+              0  0  60px rgba(124,58,237,.12),
+              inset 0 1px 0 rgba(255,255,255,.08);
+  transform:translateY(22px) scale(.97);
+  transition:transform .32s cubic-bezier(.34,1.56,.64,1);
+}
+.modal::-webkit-scrollbar{width:4px}
+.modal::-webkit-scrollbar-thumb{background:rgba(157,92,246,.3);border-radius:2px}
+.modal-overlay.open .modal{transform:translateY(0) scale(1)}
+
+.modal-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:22px}
+.modal-title{
+  font-family:'Syne',sans-serif;font-size:1.22rem;font-weight:800;
+  background:linear-gradient(135deg,#fff,var(--p3));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.modal-subtitle{font-size:.73rem;color:var(--text-muted);margin-top:3px}
+.modal-close{
+  width:30px;height:30px;border-radius:9px;cursor:pointer;
+  background:linear-gradient(145deg,#1e1538,#130d25);
+  border:1px solid rgba(157,92,246,.2);
+  box-shadow:var(--neo-out);
+  display:flex;align-items:center;justify-content:center;
+  font-size:.9rem;color:var(--text-muted);transition:all .2s;
+}
+.modal-close:hover{color:var(--red);border-color:rgba(248,113,113,.4);box-shadow:0 0 10px rgba(248,113,113,.3)}
+
+/* Neomorphic form inputs */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.form-group{display:flex;flex-direction:column;gap:6px}
+.form-group.full{grid-column:1/-1}
+.form-group label{
+  font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--text-dim);
+}
+.form-group input,.form-group select,.form-group textarea{
+  padding:9px 13px;
+  background:linear-gradient(145deg,#160f2c,#1c1235);
+  border:1px solid rgba(157,92,246,.2);
+  border-radius:10px;font-size:.845rem;
+  font-family:'Inter',sans-serif;color:var(--text);
+  box-shadow:var(--neo-in);
+  transition:all .2s;
+}
+.form-group input::placeholder,.form-group textarea::placeholder{color:var(--text-dim)}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{
+  outline:none;border-color:rgba(157,92,246,.55);
+  box-shadow:var(--neo-in),0 0 0 3px rgba(124,58,237,.15);
+}
+.form-group select option{background:#1a1030;color:var(--text)}
+.form-actions{
+  display:flex;gap:9px;justify-content:flex-end;
+  margin-top:20px;padding-top:18px;
+  border-top:1px solid rgba(157,92,246,.15);
+}
+
+/* ═══════════════════════════════════════════
+   SCROLLBAR GLOBAL
+═══════════════════════════════════════════ */
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(157,92,246,.3);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:rgba(157,92,246,.55)}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-wrap">
+      <div class="logo-icon">🏥</div>
+      <div class="logo-text">
+        <h1>MediCare</h1>
+        <span>Hospital Management</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="nav">
+    <div class="nav-section">Overview</div>
+    <div class="nav-item active" onclick="showPage(&#39;dashboard&#39;,this)">
+      <span class="nav-icon">⬡</span>Dashboard<div class="nav-pip"></div>
+    </div>
+
+    <div class="nav-section">Clinical</div>
+    <div class="nav-item" onclick="showPage(&#39;patients&#39;,this)"><span class="nav-icon">👤</span>Patients</div>
+    <div class="nav-item" onclick="showPage(&#39;doctors&#39;,this)"><span class="nav-icon">👨‍⚕️</span>Doctors</div>
+    <div class="nav-item" onclick="showPage(&#39;appointments&#39;,this)"><span class="nav-icon">📅</span>Appointments</div>
+    <div class="nav-item" onclick="showPage(&#39;prescriptions&#39;,this)"><span class="nav-icon">📋</span>Prescriptions</div>
+
+    <div class="nav-section">Facility</div>
+    <div class="nav-item" onclick="showPage(&#39;rooms&#39;,this)"><span class="nav-icon">🛏</span>Rooms</div>
+    <div class="nav-item" onclick="showPage(&#39;admissions&#39;,this)"><span class="nav-icon">🏨</span>Admissions</div>
+
+    <div class="nav-section">Administration</div>
+    <div class="nav-item" onclick="showPage(&#39;billing&#39;,this)"><span class="nav-icon">💳</span>Billing</div>
+    <div class="nav-item" onclick="showPage(&#39;medicines&#39;,this)"><span class="nav-icon">💊</span>Medicines</div>
+    <div class="nav-item" onclick="showPage(&#39;staff&#39;,this)"><span class="nav-icon">👥</span>Staff</div>
+  </div>
+
+  <div class="sidebar-footer">
+    <div class="user-card">
+      <div class="user-av">A</div>
+      <div>
+        <div class="user-name">Admin User</div>
+        <div class="user-role">System Administrator</div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="topbar">
+    <div>
+      <div class="topbar-title" id="page-title">⬡Dashboard</div>
+      <div class="topbar-sub" id="current-date">Tuesday, 19 May 2026</div>
+    </div>
+    <div class="topbar-right">
+      <div class="online-chip">● System Online</div>
+      <div class="neo-btn">🔔</div>
+      <div class="neo-btn">⚙️</div>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- DASHBOARD -->
+    <div class="page active" id="page-dashboard">
+      <div class="stats-grid">
+        <div class="stat-card s-purple">
+          <div class="stat-icon-pill">👤</div>
+          <div class="stat-num" id="stat-patients">6</div>
+          <div class="stat-label">Total Patients</div>
+          <div class="stat-sub">↑ Active records</div>
+        </div>
+        <div class="stat-card s-teal">
+          <div class="stat-icon-pill">👨‍⚕️</div>
+          <div class="stat-num" id="stat-doctors">5</div>
+          <div class="stat-label">Doctors On Staff</div>
+          <div class="stat-sub">All departments</div>
+        </div>
+        <div class="stat-card s-pink">
+          <div class="stat-icon-pill">🛏</div>
+          <div class="stat-num" id="stat-rooms">2</div>
+          <div class="stat-label">Available Rooms</div>
+          <div class="stat-sub">Ready for admission</div>
+        </div>
+        <div class="stat-card s-amber">
+          <div class="stat-icon-pill">📅</div>
+          <div class="stat-num" id="stat-appts">3</div>
+          <div class="stat-label">Scheduled Appts</div>
+          <div class="stat-sub">● Pending</div>
+        </div>
+      </div>
+
+      <div class="dash-grid">
+        <div>
+          <div class="table-wrap">
+            <div class="widget-label">Recent Admissions <a>View all →</a></div>
+            <table>
+              <thead><tr><th>Patient</th><th>Doctor</th><th>Room</th><th>Status</th></tr></thead>
+              <tbody id="dash-admissions">
+    <tr><td><strong>Arjun Singh</strong></td><td>Dr. Ramesh Kumar</td>
+    <td>102</td><td><span class="chip chip-green">Admitted</span></td></tr>
+    <tr><td><strong>Meena Patel</strong></td><td>Dr. Priya Sharma</td>
+    <td>202</td><td><span class="chip chip-green">Admitted</span></td></tr>
+    <tr><td><strong>Ravi Verma</strong></td><td>Dr. Anil Mehta</td>
+    <td>—</td><td><span class="chip chip-blue">Discharged</span></td></tr></tbody>
+            </table>
+          </div>
+          <div class="table-wrap">
+            <div class="widget-label">Upcoming Appointments <a>View all →</a></div>
+            <table>
+              <thead><tr><th>Patient</th><th>Doctor</th><th>Date</th><th>Time</th><th>Status</th></tr></thead>
+              <tbody id="dash-appointments">
+    <tr><td><strong>Arjun Singh</strong></td><td>Dr. Ramesh Kumar</td>
+    <td>2025-06-01</td><td>10:00</td><td><span class="chip chip-green">Scheduled</span></td></tr>
+    <tr><td><strong>Meena Patel</strong></td><td>Dr. Priya Sharma</td>
+    <td>2025-06-01</td><td>11:00</td><td><span class="chip chip-green">Scheduled</span></td></tr>
+    <tr><td><strong>Ravi Verma</strong></td><td>Dr. Anil Mehta</td>
+    <td>2025-06-02</td><td>09:00</td><td><span class="chip chip-blue">Completed</span></td></tr>
+    <tr><td><strong>Lakshmi Devi</strong></td><td>Dr. Sunita Rao</td>
+    <td>2025-06-02</td><td>14:00</td><td><span class="chip chip-green">Scheduled</span></td></tr></tbody>
+            </table>
+          </div>
+        </div>
+        <div>
+          <div class="table-wrap">
+            <div class="widget-label">Billing Summary <a>View all →</a></div>
+            <table>
+              <thead><tr><th>Patient</th><th>Total</th><th>Status</th></tr></thead>
+              <tbody id="dash-bills">
+    <tr><td><strong>Arjun Singh</strong></td>
+    <td style="color:#c084fc;font-weight:700">₹2,350</td>
+    <td><span class="chip chip-red">Pending</span></td></tr>
+    <tr><td><strong>Meena Patel</strong></td>
+    <td style="color:#c084fc;font-weight:700">₹5,100</td>
+    <td><span class="chip chip-yellow">Partial</span></td></tr>
+    <tr><td><strong>Ravi Verma</strong></td>
+    <td style="color:#c084fc;font-weight:700">₹7,360</td>
+    <td><span class="chip chip-green">Paid</span></td></tr></tbody>
+            </table>
+          </div>
+          <div class="table-wrap">
+            <div class="widget-label">⚠ Low Stock Medicines</div>
+            <table>
+              <thead><tr><th>Medicine</th><th>Stock</th></tr></thead>
+              <tbody id="dash-meds">
+    <tr><td>Ibuprofen 400mg</td><td><strong style="color:var(--red)">50</strong></td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PATIENTS -->
+    <div class="page" id="page-patients">
+      <div class="section-header">
+        <div class="section-title">Patient Records</div>
+        <button class="btn btn-primary" onclick="openModal(&#39;add-patient&#39;)">+ Add Patient</button>
+      </div>
+      <div class="search-bar"><div class="search-wrap">
+        <input class="search-input" type="text" id="patient-search" placeholder="Search by name, phone, blood group…" oninput="renderPatients()">
+      </div></div>
+      <div class="table-wrap">
+        <table><thead><tr><th>#</th><th>Name</th><th>DOB</th><th>Gender</th><th>Phone</th><th>Blood</th><th>Registered</th><th>Action</th></tr></thead>
+        <tbody id="patient-table"><tr>
+      <td>1</td><td><strong>Arjun Singh</strong></td><td>1990-05-12</td>
+      <td>Male</td><td>9000000001</td><td><span class="chip chip-pink">O+</span></td><td>2025-05-01</td>
+      <td><button class="btn btn-red btn-sm" onclick="deleteRow(&#39;patients&#39;,1)">🗑 Delete</button></td>
+    </tr><tr>
+      <td>2</td><td><strong>Meena Patel</strong></td><td>1985-08-22</td>
+      <td>Female</td><td>9000000002</td><td><span class="chip chip-pink">A+</span></td><td>2025-05-03</td>
+      <td><button class="btn btn-red btn-sm" onclick="deleteRow(&#39;patients&#39;,2)">🗑 Delete</button></td>
+    </tr><tr>
+      <td>3</td><td><strong>Ravi Verma</strong></td><td>2000-11-30</td>
+      <td>Male</td><td>9000000003</td><td><span class="chip chip-pink">B+</span></td><td>2025-05-10</td>
+      <td><button class="btn btn-red btn-sm" onclick="deleteRow(&#39;patients&#39;,3)">🗑 Delete</button></td>
+    </tr><tr>
+      <td>4</td><td><strong>Lakshmi Devi</strong></td><td>1975-02-14</td>
+      <td>Female</td><td>9000000004</td><td><span class="chip chip-pink">AB-</span></td><td>2025-05-12</td>
+      <td><button class="btn btn-red btn-sm" onclick="deleteRow(&#39;patients&#39;,4)">🗑 Delete</button></td>
+    </tr><tr>
+      <td>5</td><td><strong>Suresh Babu</strong></td><td>1995-07-07</td>
+      <td>Male</td><td>9000000005</td><td><span class="chip chip-pink">O-</span></td><td>2025-05-15</td>
+      <td><button class="btn btn-red btn-sm" onclick="deleteRow(&#39;patients&#39;,5)">🗑 Delete</button></td>
+    </tr><tr>
+      <td>6</td><td><strong>sylvia</strong></td><td>2006-08-09</td>
+      <td>Male</td><td>123456485</td><td><span class="chip chip-pink">O+</span></td><td>2026-05-19</td>
+      <td><button class="btn btn-red btn-sm" onclick="deleteRow(&#39;patients&#39;,6)">🗑 Delete</button></td>
+    </tr></tbody></table>
+      </div>
+    </div>
+
+    <!-- DOCTORS -->
+    <div class="page" id="page-doctors">
+      <div class="section-header">
+        <div class="section-title">Doctor Directory</div>
+        <button class="btn btn-primary" onclick="openModal(&#39;add-doctor&#39;)">+ Add Doctor</button>
+      </div>
+      <div class="table-wrap">
+        <table><thead><tr><th>#</th><th>Name</th><th>Specialization</th><th>Department</th><th>Phone</th><th>Available</th><th>Action</th></tr></thead>
+        <tbody id="doctor-table"><tr>
+    <td>1</td><td><strong>Dr. Ramesh Kumar</strong></td>
+    <td><span class="chip chip-purple">Cardiologist</span></td><td>Cardiology</td><td>9876543210</td>
+    <td><span class="chip chip-green">Mon-Fri</span></td>
+    <td><button class="btn btn-red btn-sm" onclick="deleteRow(&#39;doctors&#39;,1)">🗑 Delete</button></td>
+  </tr><tr>
+    <td>2</td><td><strong>Dr. Priya Sharma</strong></td>
+    <td><span class="chip chip-purple">Neurologist</span></td><td>Neurology</td><td>9876543211</td>
+    <td><span class="chip chip-green">Mon-Sat</span></td>
+    <td><button class="btn btn-red btn-sm" onclick="deleteRow(&#39;doctors&#39;,2)">🗑 Delete</button></td>
+  </tr><tr>
+    <td>3</td><td><strong>Dr. Anil Mehta</strong></td>
+    <td><span class="chip chip-purple">Orthopedic Surgeon</span></td><td>Orthopedics</td><td>9876543212</td>
+    <td><span class="chip chip-green">Tue-Sat</span></td>
+    <td><button class="btn btn-red btn-sm" onclick="deleteRow(&#39;doctors&#39;,3)">🗑 Delete</button></td>
+  </tr><tr>
+    <td>4</td><td><strong>Dr. Sunita Rao</strong></td>
+    <td><span class="chip chip-purple">Pediatrician</span></td><td>Pediatrics</td><td>9876543213</td>
+    <td><span class="chip chip-green">Mon-Fri</span></td>
+    <td><button class="btn btn-red btn-sm" onclick="deleteRow(&#39;doctors&#39;,4)">🗑 Delete</button></td>
+  </tr><tr>
+    <td>5</td><td><strong>Dr. Vikram Nair</strong></td>
+    <td><span class="chip chip-purple">General Physician</span></td><td>General Medicine</td><td>9876543214</td>
+    <td><span class="chip chip-green">Mon-Sun</span></td>
+    <td><button class="btn btn-red btn-sm" onclick="deleteRow(&#39;doctors&#39;,5)">🗑 Delete</button></td>
+  </tr></tbody></table>
+      </div>
+    </div>
+
+    <!-- APPOINTMENTS -->
+    <div class="page" id="page-appointments">
+      <div class="section-header">
+        <div class="section-title">Appointments</div>
+        <button class="btn btn-primary" onclick="openModal(&#39;add-appt&#39;)">+ Book Appointment</button>
+      </div>
+      <div class="table-wrap">
+        <table><thead><tr><th>#</th><th>Patient</th><th>Doctor</th><th>Date</th><th>Time</th><th>Reason</th><th>Status</th><th>Action</th></tr></thead>
+        <tbody id="appt-table"><tr>
+    <td>1</td><td><strong>Arjun Singh</strong></td><td>Dr. Ramesh Kumar</td>
+    <td>2025-06-01</td><td>10:00</td><td>Chest pain</td><td><span class="chip chip-green">Scheduled</span></td>
+    <td style="display:flex;gap:4px;flex-wrap:wrap">
+      
+        <button class="btn btn-green btn-sm" onclick="completeAppt(1)">✓</button>
+        <button class="btn btn-sm" style="background:rgba(251,191,36,.1);color:var(--amber);border:1px solid rgba(251,191,36,.3)" onclick="cancelAppt(1)">✕</button>
+      <button class="btn btn-red btn-sm" onclick="deleteRow(&#39;appointments&#39;,1)">🗑</button>
+    </td>
+  </tr><tr>
+    <td>2</td><td><strong>Meena Patel</strong></td><td>Dr. Priya Sharma</td>
+    <td>2025-06-01</td><td>11:00</td><td>Migraine</td><td><span class="chip chip-green">Scheduled</span></td>
+    <td style="display:flex;gap:4px;flex-wrap:wrap">
+      
+        <button class="btn btn-green btn-sm" onclick="completeAppt(2)">✓</button>
+        <button class="btn btn-sm" style="background:rgba(251,191,36,.1);color:var(--amber);border:1px solid rgba(251,191,36,.3)" onclick="cancelAppt(2)">✕</button>
+      <button class="btn btn-red btn-sm" onclick="deleteRow(&#39;appointments&#39;,2)">🗑</button>
+    </td>
+  </tr><tr>
+    <td>3</td><td><strong>Ravi Verma</strong></td><td>Dr. Anil Mehta</td>
+    <td>2025-06-02</td><td>09:00</td><td>Knee injury</td><td><span class="chip chip-blue">Completed</span></td>
+    <td style="display:flex;gap:4px;flex-wrap:wrap">
+      
+      <button class="btn btn-red btn-sm" onclick="deleteRow(&#39;appointments&#39;,3)">🗑</button>
+    </td>
+  </tr><tr>
+    <td>4</td><td><strong>Lakshmi Devi</strong></td><td>Dr. Sunita Rao</td>
+    <td>2025-06-02</td><td>14:00</td><td>Child vaccination</td><td><span class="chip chip-green">Scheduled</span></td>
+    <td style="display:flex;gap:4px;flex-wrap:wrap">
+      
+        <button class="btn btn-green btn-sm" onclick="completeAppt(4)">✓</button>
+        <button class="btn btn-sm" style="background:rgba(251,191,36,.1);color:var(--amber);border:1px solid rgba(251,191,36,.3)" onclick="cancelAppt(4)">✕</button>
+      <button class="btn btn-red btn-sm" onclick="deleteRow(&#39;appointments&#39;,4)">🗑</button>
+    </td>
+  </tr><tr>
+    <td>5</td><td><strong>Suresh Babu</strong></td><td>Dr. Vikram Nair</td>
+    <td>2025-06-03</td><td>16:00</td><td>Routine checkup</td><td><span class="chip chip-red">Cancelled</span></td>
+    <td style="display:flex;gap:4px;flex-wrap:wrap">
+      
+      <button class="btn btn-red btn-sm" onclick="deleteRow(&#39;appointments&#39;,5)">🗑</button>
+    </td>
+  </tr></tbody></table>
+      </div>
+    </div>
+
+    <!-- PRESCRIPTIONS -->
+    <div class="page" id="page-prescriptions">
+      <div class="section-header">
+        <div class="section-title">Prescriptions</div>
+        <button class="btn btn-primary" onclick="openModal(&#39;add-pres&#39;)">+ Add Prescription</button>
+      </div>
+      <div class="search-bar"><div class="search-wrap">
+        <input class="search-input" type="text" id="pres-search" placeholder="Search by patient or doctor…" oninput="renderPrescriptions()">
+      </div></div>
+      <div class="table-wrap">
+        <table><thead><tr><th>#</th><th>Patient</th><th>Doctor</th><th>Medicine</th><th>Dosage</th><th>Days</th><th>Date</th><th>Action</th></tr></thead>
+        <tbody id="pres-table"><tr>
+      <td><strong>1</strong></td><td><strong>Arjun Singh</strong></td>
+      <td>Dr. Ramesh Kumar</td><td><span class="chip chip-purple">Atorvastatin 10mg</span></td>
+      <td>1 tablet after dinner</td><td><span class="chip chip-cyan">30 days</span></td><td>2025-05-28</td>
+      <td><button class="btn btn-red btn-sm" onclick="deleteRow(&#39;prescriptions&#39;,1)">🗑</button></td>
+    </tr><tr>
+      <td><strong>2</strong></td><td><strong>Meena Patel</strong></td>
+      <td>Dr. Priya Sharma</td><td><span class="chip chip-purple">Paracetamol 500mg</span></td>
+      <td>2 tablets twice a day</td><td><span class="chip chip-cyan">5 days</span></td><td>2025-05-29</td>
+      <td><button class="btn btn-red btn-sm" onclick="deleteRow(&#39;prescriptions&#39;,2)">🗑</button></td>
+    </tr><tr>
+      <td><strong>3</strong></td><td><strong>Ravi Verma</strong></td>
+      <td>Dr. Anil Mehta</td><td><span class="chip chip-purple">Ibuprofen 400mg</span></td>
+      <td>1 tablet after meals</td><td><span class="chip chip-cyan">7 days</span></td><td>2025-05-25</td>
+      <td><button class="btn btn-red btn-sm" onclick="deleteRow(&#39;prescriptions&#39;,3)">🗑</button></td>
+    </tr></tbody></table>
+      </div>
+    </div>
+
+    <!-- ROOMS -->
+    <div class="page" id="page-rooms">
+      <div class="section-header">
+        <div class="section-title">Room Management</div>
+        <button class="btn btn-primary" onclick="openModal(&#39;add-room&#39;)">+ Add Room</button>
+      </div>
+      <div class="room-grid" id="room-grid">
+    <div class="room-card occupied">
+      <div class="room-num">101</div>
+      <div class="room-type">General</div>
+      <div class="room-rate">₹500 / day</div>
+      <span class="chip chip-red">Occupied</span>
+    </div>
+    <div class="room-card occupied">
+      <div class="room-num">102</div>
+      <div class="room-type">General</div>
+      <div class="room-rate">₹500 / day</div>
+      <span class="chip chip-red">Occupied</span>
+    </div>
+    <div class="room-card available">
+      <div class="room-num">201</div>
+      <div class="room-type">Private</div>
+      <div class="room-rate">₹2,000 / day</div>
+      <span class="chip chip-green">Available</span>
+    </div>
+    <div class="room-card occupied">
+      <div class="room-num">202</div>
+      <div class="room-type">Private</div>
+      <div class="room-rate">₹2,000 / day</div>
+      <span class="chip chip-red">Occupied</span>
+    </div>
+    <div class="room-card available">
+      <div class="room-num">401</div>
+      <div class="room-type">Emergency</div>
+      <div class="room-rate">₹3,000 / day</div>
+      <span class="chip chip-green">Available</span>
+    </div></div>
+    </div>
+
+    <!-- ADMISSIONS -->
+    <div class="page" id="page-admissions">
+      <div class="section-header">
+        <div class="section-title">Admissions</div>
+        <button class="btn btn-primary" onclick="openModal(&#39;add-admission&#39;)">+ New Admission</button>
+      </div>
+      <div class="table-wrap">
+        <table><thead><tr><th>#</th><th>Patient</th><th>Doctor</th><th>Room</th><th>Admit Date</th><th>Diagnosis</th><th>Status</th><th>Action</th></tr></thead>
+        <tbody id="admission-table"><tr>
+    <td>1</td><td><strong>Arjun Singh</strong></td><td>Dr. Ramesh Kumar</td>
+    <td>102</td><td>2025-05-28</td><td>Hypertension</td><td><span class="chip chip-green">Admitted</span></td>
+    <td style="display:flex;gap:4px">
+      <button class="btn btn-green btn-sm" onclick="discharge(1)">Discharge</button>
+      <button class="btn btn-red btn-sm" onclick="deleteRow(&#39;admissions&#39;,1)">🗑</button>
+    </td>
+  </tr><tr>
+    <td>2</td><td><strong>Meena Patel</strong></td><td>Dr. Priya Sharma</td>
+    <td>202</td><td>2025-05-29</td><td>Severe Migraine</td><td><span class="chip chip-green">Admitted</span></td>
+    <td style="display:flex;gap:4px">
+      <button class="btn btn-green btn-sm" onclick="discharge(2)">Discharge</button>
+      <button class="btn btn-red btn-sm" onclick="deleteRow(&#39;admissions&#39;,2)">🗑</button>
+    </td>
+  </tr><tr>
+    <td>3</td><td><strong>Ravi Verma</strong></td><td>Dr. Anil Mehta</td>
+    <td>—</td><td>2025-05-25</td><td>Fracture - Femur</td><td><span class="chip chip-blue">Discharged</span></td>
+    <td style="display:flex;gap:4px">
+      
+      <button class="btn btn-red btn-sm" onclick="deleteRow(&#39;admissions&#39;,3)">🗑</button>
+    </td>
+  </tr><tr>
+    <td>4</td><td><strong>Ravi Verma</strong></td><td>Dr. Anil Mehta</td>
+    <td>101</td><td>2025-05-19</td><td>Post-op Recovery</td><td><span class="chip chip-green">Admitted</span></td>
+    <td style="display:flex;gap:4px">
+      <button class="btn btn-green btn-sm" onclick="discharge(4)">Discharge</button>
+      <button class="btn btn-red btn-sm" onclick="deleteRow(&#39;admissions&#39;,4)">🗑</button>
+    </td>
+  </tr></tbody></table>
+      </div>
+    </div>
+
+    <!-- BILLING -->
+    <div class="page" id="page-billing">
+      <div class="section-header">
+        <div class="section-title">Billing</div>
+        <button class="btn btn-primary" onclick="openModal(&#39;add-bill&#39;)">+ Generate Bill</button>
+      </div>
+      <div class="table-wrap">
+        <table><thead><tr><th>#</th><th>Patient</th><th>Room</th><th>Medicine</th><th>Doctor</th><th>Other</th><th>Total</th><th>Status</th><th>Action</th></tr></thead>
+        <tbody id="bill-table"><tr>
+      <td>1</td><td><strong>Arjun Singh</strong></td>
+      <td>₹1,500</td><td>₹250</td><td>₹500</td><td>₹100</td>
+      <td style="color:#c084fc;font-weight:700">₹2,350</td><td><span class="chip chip-red">Pending</span></td>
+      <td style="display:flex;gap:4px">
+        <button class="btn btn-green btn-sm" onclick="markPaid(1)">Paid</button>
+        <button class="btn btn-red btn-sm" onclick="deleteRow(&#39;bills&#39;,1)">🗑</button>
+      </td>
+    </tr><tr>
+      <td>2</td><td><strong>Meena Patel</strong></td>
+      <td>₹4,000</td><td>₹100</td><td>₹800</td><td>₹200</td>
+      <td style="color:#c084fc;font-weight:700">₹5,100</td><td><span class="chip chip-yellow">Partial</span></td>
+      <td style="display:flex;gap:4px">
+        <button class="btn btn-green btn-sm" onclick="markPaid(2)">Paid</button>
+        <button class="btn btn-red btn-sm" onclick="deleteRow(&#39;bills&#39;,2)">🗑</button>
+      </td>
+    </tr><tr>
+      <td>3</td><td><strong>Ravi Verma</strong></td>
+      <td>₹5,000</td><td>₹560</td><td>₹1,500</td><td>₹300</td>
+      <td style="color:#c084fc;font-weight:700">₹7,360</td><td><span class="chip chip-green">Paid</span></td>
+      <td style="display:flex;gap:4px">
+        
+        <button class="btn btn-red btn-sm" onclick="deleteRow(&#39;bills&#39;,3)">🗑</button>
+      </td>
+    </tr></tbody></table>
+      </div>
+    </div>
+
+    <!-- MEDICINES -->
+    <div class="page" id="page-medicines">
+      <div class="section-header">
+        <div class="section-title">Medicine Inventory</div>
+        <button class="btn btn-primary" onclick="openModal(&#39;add-med&#39;)">+ Add Medicine</button>
+      </div>
+      <div class="table-wrap">
+        <table><thead><tr><th>#</th><th>Name</th><th>Category</th><th>Price (₹)</th><th>Stock</th><th>Status</th><th>Action</th></tr></thead>
+        <tbody id="med-table"><tr>
+    <td>1</td><td><strong>Paracetamol 500mg</strong></td>
+    <td><span class="chip chip-purple">Analgesic</span></td><td>₹5</td><td>500</td>
+    <td><span class="chip chip-green">In Stock</span></td>
+    <td><button class="btn btn-red btn-sm" onclick="deleteRow(&#39;medicines&#39;,1)">🗑 Delete</button></td>
+  </tr><tr>
+    <td>2</td><td><strong>Amoxicillin 250mg</strong></td>
+    <td><span class="chip chip-purple">Antibiotic</span></td><td>₹12</td><td>300</td>
+    <td><span class="chip chip-green">In Stock</span></td>
+    <td><button class="btn btn-red btn-sm" onclick="deleteRow(&#39;medicines&#39;,2)">🗑 Delete</button></td>
+  </tr><tr>
+    <td>3</td><td><strong>Atorvastatin 10mg</strong></td>
+    <td><span class="chip chip-purple">Cardiac</span></td><td>₹25</td><td>200</td>
+    <td><span class="chip chip-green">In Stock</span></td>
+    <td><button class="btn btn-red btn-sm" onclick="deleteRow(&#39;medicines&#39;,3)">🗑 Delete</button></td>
+  </tr><tr>
+    <td>4</td><td><strong>Ibuprofen 400mg</strong></td>
+    <td><span class="chip chip-purple">Anti-inflammatory</span></td><td>₹8</td><td>50</td>
+    <td><span class="chip chip-red">Low Stock</span></td>
+    <td><button class="btn btn-red btn-sm" onclick="deleteRow(&#39;medicines&#39;,4)">🗑 Delete</button></td>
+  </tr><tr>
+    <td>5</td><td><strong>Metformin 500mg</strong></td>
+    <td><span class="chip chip-purple">Antidiabetic</span></td><td>₹10</td><td>350</td>
+    <td><span class="chip chip-green">In Stock</span></td>
+    <td><button class="btn btn-red btn-sm" onclick="deleteRow(&#39;medicines&#39;,5)">🗑 Delete</button></td>
+  </tr></tbody></table>
+      </div>
+    </div>
+
+    <!-- STAFF -->
+    <div class="page" id="page-staff">
+      <div class="section-header">
+        <div class="section-title">Staff Directory</div>
+        <button class="btn btn-primary" onclick="openModal(&#39;add-staff&#39;)">+ Add Staff</button>
+      </div>
+      <div class="table-wrap">
+        <table><thead><tr><th>#</th><th>Name</th><th>Role</th><th>Department</th><th>Phone</th><th>Salary (₹)</th><th>Action</th></tr></thead>
+        <tbody id="staff-table"><tr>
+    <td>1</td><td><strong>Kavya R.</strong></td>
+    <td><span class="chip chip-cyan">Nurse</span></td><td>Cardiology</td><td>8000000001</td>
+    <td style="color:var(--green);font-weight:700">₹28,000</td>
+    <td><button class="btn btn-red btn-sm" onclick="deleteRow(&#39;staff&#39;,1)">🗑 Delete</button></td>
+  </tr><tr>
+    <td>2</td><td><strong>Mohan Das</strong></td>
+    <td><span class="chip chip-cyan">Lab Technician</span></td><td>Neurology</td><td>8000000002</td>
+    <td style="color:var(--green);font-weight:700">₹25,000</td>
+    <td><button class="btn btn-red btn-sm" onclick="deleteRow(&#39;staff&#39;,2)">🗑 Delete</button></td>
+  </tr><tr>
+    <td>3</td><td><strong>Anitha K.</strong></td>
+    <td><span class="chip chip-cyan">Receptionist</span></td><td>General Medicine</td><td>8000000003</td>
+    <td style="color:var(--green);font-weight:700">₹22,000</td>
+    <td><button class="btn btn-red btn-sm" onclick="deleteRow(&#39;staff&#39;,3)">🗑 Delete</button></td>
+  </tr><tr>
+    <td>4</td><td><strong>Ramu G.</strong></td>
+    <td><span class="chip chip-cyan">Pharmacist</span></td><td>General Medicine</td><td>8000000004</td>
+    <td style="color:var(--green);font-weight:700">₹30,000</td>
+    <td><button class="btn btn-red btn-sm" onclick="deleteRow(&#39;staff&#39;,4)">🗑 Delete</button></td>
+  </tr></tbody></table>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
+  <div class="modal"><div id="modal-content">
+    <div class="modal-header">
+      <div><div class="modal-title">Add New Patient</div><div class="modal-subtitle">Enter patient details below</div></div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    
+      <div class="form-grid">
+        <div class="form-group"><label>Full Name</label><input id="f-name" placeholder="e.g. Arjun Singh"></div>
+        <div class="form-group"><label>Date of Birth</label><input id="f-dob" type="date"></div>
+        <div class="form-group"><label>Gender</label><select id="f-gender"><option>Male</option><option>Female</option><option>Other</option></select></div>
+        <div class="form-group"><label>Phone</label><input id="f-phone" placeholder="9XXXXXXXXX"></div>
+        <div class="form-group"><label>Email</label><input id="f-email" placeholder="email@mail.com"></div>
+        <div class="form-group"><label>Blood Group</label><select id="f-blood"><option>O+</option><option>O-</option><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>AB+</option><option>AB-</option></select></div>
+        <div class="form-group full"><label>Address</label><input id="f-addr" placeholder="City / Address"></div>
+      </div>
+    <div class="form-actions">
+      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="save_patient()">Save Record</button>
+    </div></div></div>
+</div>
+
+<script>
+const depts=['Cardiology','Neurology','Orthopedics','Pediatrics','General Medicine'];
+const db={
+  patients:[
+    {id:1,name:'Arjun Singh',  dob:'1990-05-12',gender:'Male',  phone:'9000000001',email:'arjun@mail.com',  address:'Bangalore',blood:'O+', reg:'2025-05-01'},
+    {id:2,name:'Meena Patel',  dob:'1985-08-22',gender:'Female',phone:'9000000002',email:'meena@mail.com',  address:'Mysore',   blood:'A+', reg:'2025-05-03'},
+    {id:3,name:'Ravi Verma',   dob:'2000-11-30',gender:'Male',  phone:'9000000003',email:'ravi@mail.com',   address:'Pune',     blood:'B+', reg:'2025-05-10'},
+    {id:4,name:'Lakshmi Devi', dob:'1975-02-14',gender:'Female',phone:'9000000004',email:'lakshmi@mail.com',address:'Chennai',  blood:'AB-',reg:'2025-05-12'},
+    {id:5,name:'Suresh Babu',  dob:'1995-07-07',gender:'Male',  phone:'9000000005',email:'suresh@mail.com', address:'Hyderabad',blood:'O-', reg:'2025-05-15'},
+  ],
+  doctors:[
+    {id:1,name:'Dr. Ramesh Kumar', spec:'Cardiologist',       dept:'Cardiology',      phone:'9876543210',avail:'Mon-Fri'},
+    {id:2,name:'Dr. Priya Sharma', spec:'Neurologist',        dept:'Neurology',       phone:'9876543211',avail:'Mon-Sat'},
+    {id:3,name:'Dr. Anil Mehta',   spec:'Orthopedic Surgeon', dept:'Orthopedics',     phone:'9876543212',avail:'Tue-Sat'},
+    {id:4,name:'Dr. Sunita Rao',   spec:'Pediatrician',       dept:'Pediatrics',      phone:'9876543213',avail:'Mon-Fri'},
+    {id:5,name:'Dr. Vikram Nair',  spec:'General Physician',  dept:'General Medicine',phone:'9876543214',avail:'Mon-Sun'},
+  ],
+  rooms:[
+    {id:1,num:'101',type:'General',  status:'Occupied', rate:500},
+    {id:2,num:'102',type:'General',  status:'Occupied', rate:500},
+    {id:3,num:'201',type:'Private',  status:'Available',rate:2000},
+    {id:4,num:'202',type:'Private',  status:'Occupied', rate:2000},
+    {id:6,num:'401',type:'Emergency',status:'Available',rate:3000},
+  ],
+  appointments:[
+    {id:1,patientId:1,doctorId:1,date:'2025-06-01',time:'10:00',reason:'Chest pain',       status:'Scheduled'},
+    {id:2,patientId:2,doctorId:2,date:'2025-06-01',time:'11:00',reason:'Migraine',          status:'Scheduled'},
+    {id:3,patientId:3,doctorId:3,date:'2025-06-02',time:'09:00',reason:'Knee injury',       status:'Completed'},
+    {id:4,patientId:4,doctorId:4,date:'2025-06-02',time:'14:00',reason:'Child vaccination', status:'Scheduled'},
+    {id:5,patientId:5,doctorId:5,date:'2025-06-03',time:'16:00',reason:'Routine checkup',   status:'Cancelled'},
+  ],
+  admissions:[
+    {id:1,patientId:1,roomId:2,doctorId:1,admit:'2025-05-28',discharge:'',           diagnosis:'Hypertension',    status:'Admitted'},
+    {id:2,patientId:2,roomId:4,doctorId:2,admit:'2025-05-29',discharge:'',           diagnosis:'Severe Migraine',  status:'Admitted'},
+    {id:3,patientId:3,roomId:5,doctorId:3,admit:'2025-05-25',discharge:'2025-06-01', diagnosis:'Fracture - Femur', status:'Discharged'},
+    {id:4,patientId:3,roomId:1,doctorId:3,admit:'2025-05-19',discharge:'',           diagnosis:'Post-op Recovery', status:'Admitted'},
+  ],
+  bills:[
+    {id:1,patientId:1,room:1500,med:250, doc:500, other:100,status:'Pending'},
+    {id:2,patientId:2,room:4000,med:100, doc:800, other:200,status:'Partial'},
+    {id:3,patientId:3,room:5000,med:560, doc:1500,other:300,status:'Paid'},
+  ],
+  medicines:[
+    {id:1,name:'Paracetamol 500mg',cat:'Analgesic',        price:5, stock:500},
+    {id:2,name:'Amoxicillin 250mg',cat:'Antibiotic',       price:12,stock:300},
+    {id:3,name:'Atorvastatin 10mg',cat:'Cardiac',          price:25,stock:200},
+    {id:4,name:'Ibuprofen 400mg',  cat:'Anti-inflammatory',price:8, stock:50},
+    {id:5,name:'Metformin 500mg',  cat:'Antidiabetic',     price:10,stock:350},
+  ],
+  staff:[
+    {id:1,name:'Kavya R.',  role:'Nurse',          dept:'Cardiology',      phone:'8000000001',salary:28000},
+    {id:2,name:'Mohan Das', role:'Lab Technician', dept:'Neurology',       phone:'8000000002',salary:25000},
+    {id:3,name:'Anitha K.', role:'Receptionist',   dept:'General Medicine',phone:'8000000003',salary:22000},
+    {id:4,name:'Ramu G.',   role:'Pharmacist',     dept:'General Medicine',phone:'8000000004',salary:30000},
+  ],
+  prescriptions:[
+    {id:1,patientId:1,doctorId:1,medId:3,dosage:'1 tablet after dinner',days:30,date:'2025-05-28'},
+    {id:2,patientId:2,doctorId:2,medId:1,dosage:'2 tablets twice a day', days:5, date:'2025-05-29'},
+    {id:3,patientId:3,doctorId:3,medId:4,dosage:'1 tablet after meals',  days:7, date:'2025-05-25'},
+  ]
+};
+let nextId={p:6,d:6,r:7,a:6,ad:5,b:4,m:6,s:5,pr:4};
+
+const pName=id=>db.patients.find(x=>x.id===id)?.name||'—';
+const dName=id=>db.doctors.find(x=>x.id===id)?.name||'—';
+const rNum =id=>db.rooms.find(x=>x.id===id)?.num||'—';
+const mName=id=>db.medicines.find(x=>x.id===id)?.name||'—';
+const chip=(l,c)=>`<span class="chip chip-${c}">${l}</span>`;
+const statusChip=s=>{
+  if(['Available','Admitted','Scheduled','Paid'].includes(s))return chip(s,'green');
+  if(['Occupied','Cancelled','Pending'].includes(s))return chip(s,'red');
+  if(['Partial','Maintenance'].includes(s))return chip(s,'yellow');
+  if(['Completed','Discharged'].includes(s))return chip(s,'blue');
+  return chip(s,'grey');
+};
+const fmt=n=>'₹'+n.toLocaleString('en-IN');
+
+function showPage(id,el){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  if(el)el.classList.add('active');
+  document.getElementById('page-title').textContent=el?el.textContent.trim():id;
+  renderAll();
+}
+
+function renderAll(){
+  renderDashboard();renderPatients();renderDoctors();renderAppointments();
+  renderPrescriptions();renderRooms();renderAdmissions();renderBills();renderMeds();renderStaff();
+}
+
+function renderDashboard(){
+  document.getElementById('stat-patients').textContent=db.patients.length;
+  document.getElementById('stat-doctors').textContent=db.doctors.length;
+  document.getElementById('stat-rooms').textContent=db.rooms.filter(r=>r.status==='Available').length;
+  document.getElementById('stat-appts').textContent=db.appointments.filter(a=>a.status==='Scheduled').length;
+  document.getElementById('dash-admissions').innerHTML=db.admissions.slice(0,3).map(a=>`
+    <tr><td><strong>${pName(a.patientId)}</strong></td><td>${dName(a.doctorId)}</td>
+    <td>${rNum(a.roomId)}</td><td>${statusChip(a.status)}</td></tr>`).join('');
+  document.getElementById('dash-appointments').innerHTML=db.appointments.slice(0,4).map(a=>`
+    <tr><td><strong>${pName(a.patientId)}</strong></td><td>${dName(a.doctorId)}</td>
+    <td>${a.date}</td><td>${a.time}</td><td>${statusChip(a.status)}</td></tr>`).join('');
+  document.getElementById('dash-bills').innerHTML=db.bills.map(b=>`
+    <tr><td><strong>${pName(b.patientId)}</strong></td>
+    <td style="color:#c084fc;font-weight:700">${fmt(b.room+b.med+b.doc+b.other)}</td>
+    <td>${statusChip(b.status)}</td></tr>`).join('');
+  document.getElementById('dash-meds').innerHTML=db.medicines.filter(m=>m.stock<100).map(m=>`
+    <tr><td>${m.name}</td><td><strong style="color:var(--red)">${m.stock}</strong></td></tr>`).join('');
+}
+
+function renderPatients(){
+  const q=(document.getElementById('patient-search')?.value||'').toLowerCase();
+  document.getElementById('patient-table').innerHTML=db.patients
+    .filter(p=>p.name.toLowerCase().includes(q)||p.phone.includes(q)||p.blood.toLowerCase().includes(q))
+    .map(p=>`<tr>
+      <td>${p.id}</td><td><strong>${p.name}</strong></td><td>${p.dob}</td>
+      <td>${p.gender}</td><td>${p.phone}</td><td>${chip(p.blood,'pink')}</td><td>${p.reg}</td>
+      <td><button class="btn btn-red btn-sm" onclick="deleteRow('patients',${p.id})">🗑 Delete</button></td>
+    </tr>`).join('');
+}
+
+function renderDoctors(){
+  document.getElementById('doctor-table').innerHTML=db.doctors.map(d=>`<tr>
+    <td>${d.id}</td><td><strong>${d.name}</strong></td>
+    <td>${chip(d.spec,'purple')}</td><td>${d.dept}</td><td>${d.phone}</td>
+    <td>${chip(d.avail,'green')}</td>
+    <td><button class="btn btn-red btn-sm" onclick="deleteRow('doctors',${d.id})">🗑 Delete</button></td>
+  </tr>`).join('');
+}
+
+function renderAppointments(){
+  document.getElementById('appt-table').innerHTML=db.appointments.map(a=>`<tr>
+    <td>${a.id}</td><td><strong>${pName(a.patientId)}</strong></td><td>${dName(a.doctorId)}</td>
+    <td>${a.date}</td><td>${a.time}</td><td>${a.reason}</td><td>${statusChip(a.status)}</td>
+    <td style="display:flex;gap:4px;flex-wrap:wrap">
+      ${a.status==='Scheduled'?`
+        <button class="btn btn-green btn-sm" onclick="completeAppt(${a.id})">✓</button>
+        <button class="btn btn-sm" style="background:rgba(251,191,36,.1);color:var(--amber);border:1px solid rgba(251,191,36,.3)" onclick="cancelAppt(${a.id})">✕</button>`:''}
+      <button class="btn btn-red btn-sm" onclick="deleteRow('appointments',${a.id})">🗑</button>
+    </td>
+  </tr>`).join('');
+}
+
+function renderPrescriptions(){
+  const q=(document.getElementById('pres-search')?.value||'').toLowerCase();
+  document.getElementById('pres-table').innerHTML=db.prescriptions
+    .filter(pr=>pName(pr.patientId).toLowerCase().includes(q)||dName(pr.doctorId).toLowerCase().includes(q))
+    .map(pr=>`<tr>
+      <td><strong>${pr.id}</strong></td><td><strong>${pName(pr.patientId)}</strong></td>
+      <td>${dName(pr.doctorId)}</td><td>${chip(mName(pr.medId),'purple')}</td>
+      <td>${pr.dosage}</td><td>${chip(pr.days+' days','cyan')}</td><td>${pr.date}</td>
+      <td><button class="btn btn-red btn-sm" onclick="deleteRow('prescriptions',${pr.id})">🗑</button></td>
+    </tr>`).join('');
+}
+
+function renderRooms(){
+  document.getElementById('room-grid').innerHTML=db.rooms.map(r=>`
+    <div class="room-card ${r.status.toLowerCase()}">
+      <div class="room-num">${r.num}</div>
+      <div class="room-type">${r.type}</div>
+      <div class="room-rate">${fmt(r.rate)} / day</div>
+      ${statusChip(r.status)}
+    </div>`).join('');
+}
+
+function renderAdmissions(){
+  document.getElementById('admission-table').innerHTML=db.admissions.map(a=>`<tr>
+    <td>${a.id}</td><td><strong>${pName(a.patientId)}</strong></td><td>${dName(a.doctorId)}</td>
+    <td>${rNum(a.roomId)}</td><td>${a.admit}</td><td>${a.diagnosis}</td><td>${statusChip(a.status)}</td>
+    <td style="display:flex;gap:4px">
+      ${a.status==='Admitted'?`<button class="btn btn-green btn-sm" onclick="discharge(${a.id})">Discharge</button>`:''}
+      <button class="btn btn-red btn-sm" onclick="deleteRow('admissions',${a.id})">🗑</button>
+    </td>
+  </tr>`).join('');
+}
+
+function renderBills(){
+  document.getElementById('bill-table').innerHTML=db.bills.map(b=>{
+    const t=b.room+b.med+b.doc+b.other;
+    return`<tr>
+      <td>${b.id}</td><td><strong>${pName(b.patientId)}</strong></td>
+      <td>${fmt(b.room)}</td><td>${fmt(b.med)}</td><td>${fmt(b.doc)}</td><td>${fmt(b.other)}</td>
+      <td style="color:#c084fc;font-weight:700">${fmt(t)}</td><td>${statusChip(b.status)}</td>
+      <td style="display:flex;gap:4px">
+        ${b.status!=='Paid'?`<button class="btn btn-green btn-sm" onclick="markPaid(${b.id})">Paid</button>`:''}
+        <button class="btn btn-red btn-sm" onclick="deleteRow('bills',${b.id})">🗑</button>
+      </td>
+    </tr>`;}).join('');
+}
+
+function renderMeds(){
+  document.getElementById('med-table').innerHTML=db.medicines.map(m=>`<tr>
+    <td>${m.id}</td><td><strong>${m.name}</strong></td>
+    <td>${chip(m.cat,'purple')}</td><td>${fmt(m.price)}</td><td>${m.stock}</td>
+    <td>${m.stock<100?chip('Low Stock','red'):chip('In Stock','green')}</td>
+    <td><button class="btn btn-red btn-sm" onclick="deleteRow('medicines',${m.id})">🗑 Delete</button></td>
+  </tr>`).join('');
+}
+
+function renderStaff(){
+  document.getElementById('staff-table').innerHTML=db.staff.map(s=>`<tr>
+    <td>${s.id}</td><td><strong>${s.name}</strong></td>
+    <td>${chip(s.role,'cyan')}</td><td>${s.dept}</td><td>${s.phone}</td>
+    <td style="color:var(--green);font-weight:700">${fmt(s.salary)}</td>
+    <td><button class="btn btn-red btn-sm" onclick="deleteRow('staff',${s.id})">🗑 Delete</button></td>
+  </tr>`).join('');
+}
+
+function deleteRow(t,id){if(!confirm('Delete this record?'))return;db[t]=db[t].filter(x=>x.id!==id);renderAll()}
+function completeAppt(id){db.appointments.find(a=>a.id===id).status='Completed';renderAll()}
+function cancelAppt(id){db.appointments.find(a=>a.id===id).status='Cancelled';renderAll()}
+function discharge(id){
+  const a=db.admissions.find(x=>x.id===id);
+  a.status='Discharged';a.discharge=new Date().toISOString().split('T')[0];
+  const r=db.rooms.find(r=>r.id===a.roomId);if(r)r.status='Available';renderAll();
+}
+function markPaid(id){db.bills.find(b=>b.id===id).status='Paid';renderAll()}
+
+const pOpts=()=>db.patients.map(p=>`<option value="${p.id}">${p.name}</option>`).join('');
+const dOpts=()=>db.doctors.map(d=>`<option value="${d.id}">${d.name}</option>`).join('');
+const rOpts=()=>db.rooms.filter(r=>r.status==='Available').map(r=>`<option value="${r.id}">Room ${r.num} (${r.type})</option>`).join('');
+const mOpts=()=>db.medicines.map(m=>`<option value="${m.id}">${m.name}</option>`).join('');
+
+function openModal(type){
+  const forms={
+    'add-patient':{title:'Add New Patient',sub:'Enter patient details below',html:`
+      <div class="form-grid">
+        <div class="form-group"><label>Full Name</label><input id="f-name" placeholder="e.g. Arjun Singh"/></div>
+        <div class="form-group"><label>Date of Birth</label><input id="f-dob" type="date"/></div>
+        <div class="form-group"><label>Gender</label><select id="f-gender"><option>Male</option><option>Female</option><option>Other</option></select></div>
+        <div class="form-group"><label>Phone</label><input id="f-phone" placeholder="9XXXXXXXXX"/></div>
+        <div class="form-group"><label>Email</label><input id="f-email" placeholder="email@mail.com"/></div>
+        <div class="form-group"><label>Blood Group</label><select id="f-blood"><option>O+</option><option>O-</option><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>AB+</option><option>AB-</option></select></div>
+        <div class="form-group full"><label>Address</label><input id="f-addr" placeholder="City / Address"/></div>
+      </div>`},
+    'add-doctor':{title:'Add New Doctor',sub:'Register a doctor to the system',html:`
+      <div class="form-grid">
+        <div class="form-group"><label>Full Name</label><input id="f-dname" placeholder="Dr. Name"/></div>
+        <div class="form-group"><label>Specialization</label><input id="f-spec" placeholder="e.g. Cardiologist"/></div>
+        <div class="form-group"><label>Department</label><select id="f-ddept">${depts.map(d=>`<option>${d}</option>`).join('')}</select></div>
+        <div class="form-group"><label>Phone</label><input id="f-dphone" placeholder="9XXXXXXXXX"/></div>
+        <div class="form-group full"><label>Available Days</label><input id="f-avail" value="Mon-Fri"/></div>
+      </div>`},
+    'add-appt':{title:'Book Appointment',sub:'Schedule a patient appointment',html:`
+      <div class="form-grid">
+        <div class="form-group"><label>Patient</label><select id="f-appt-p">${pOpts()}</select></div>
+        <div class="form-group"><label>Doctor</label><select id="f-appt-d">${dOpts()}</select></div>
+        <div class="form-group"><label>Date</label><input id="f-appt-date" type="date"/></div>
+        <div class="form-group"><label>Time</label><input id="f-appt-time" type="time"/></div>
+        <div class="form-group full"><label>Reason</label><input id="f-appt-reason" placeholder="Brief reason…"/></div>
+      </div>`},
+    'add-pres':{title:'Add Prescription',sub:'Issue a prescription for a patient',html:`
+      <div class="form-grid">
+        <div class="form-group"><label>Prescription ID</label><input id="f-pr-id" type="number" placeholder="e.g. 101"/></div>
+        <div class="form-group"><label>Duration (Days)</label><input id="f-pr-days" type="number" value="5" min="1"/></div>
+        <div class="form-group"><label>Patient</label><select id="f-pr-p">${pOpts()}</select></div>
+        <div class="form-group"><label>Doctor</label><select id="f-pr-d">${dOpts()}</select></div>
+        <div class="form-group"><label>Medicine</label><select id="f-pr-m">${mOpts()}</select></div>
+        <div class="form-group full"><label>Dosage Instructions</label><input id="f-pr-dosage" placeholder="e.g. 1 tablet twice a day after meals"/></div>
+      </div>`},
+    'add-room':{title:'Add New Room',sub:'Register a hospital room',html:`
+      <div class="form-grid">
+        <div class="form-group"><label>Room Number</label><input id="f-rnum" placeholder="e.g. 105"/></div>
+        <div class="form-group"><label>Type</label><select id="f-rtype"><option>General</option><option>Private</option><option>ICU</option><option>Emergency</option></select></div>
+        <div class="form-group full"><label>Charges / Day (₹)</label><input id="f-rrate" type="number" value="500"/></div>
+      </div>`},
+    'add-admission':{title:'New Admission',sub:'Admit a patient to the hospital',html:`
+      <div class="form-grid">
+        <div class="form-group"><label>Patient</label><select id="f-ad-p">${pOpts()}</select></div>
+        <div class="form-group"><label>Doctor</label><select id="f-ad-d">${dOpts()}</select></div>
+        <div class="form-group"><label>Room (Available)</label><select id="f-ad-r">${rOpts()}</select></div>
+        <div class="form-group"><label>Admit Date</label><input id="f-ad-date" type="date"/></div>
+        <div class="form-group full"><label>Diagnosis</label><input id="f-ad-diag" placeholder="Initial diagnosis"/></div>
+      </div>`},
+    'add-bill':{title:'Generate Bill',sub:'Create a billing record',html:`
+      <div class="form-grid">
+        <div class="form-group"><label>Patient</label><select id="f-b-p">${pOpts()}</select></div>
+        <div class="form-group"><label>Payment Status</label><select id="f-b-status"><option>Pending</option><option>Partial</option><option>Paid</option></select></div>
+        <div class="form-group"><label>Room Charges (₹)</label><input id="f-b-room" type="number" value="0"/></div>
+        <div class="form-group"><label>Medicine Charges (₹)</label><input id="f-b-med" type="number" value="0"/></div>
+        <div class="form-group"><label>Doctor Charges (₹)</label><input id="f-b-doc" type="number" value="0"/></div>
+        <div class="form-group"><label>Other Charges (₹)</label><input id="f-b-other" type="number" value="0"/></div>
+      </div>`},
+    'add-med':{title:'Add Medicine',sub:'Add to medicine inventory',html:`
+      <div class="form-grid">
+        <div class="form-group"><label>Medicine Name</label><input id="f-mname" placeholder="e.g. Aspirin 75mg"/></div>
+        <div class="form-group"><label>Category</label><input id="f-mcat" placeholder="e.g. Analgesic"/></div>
+        <div class="form-group"><label>Price (₹)</label><input id="f-mprice" type="number" value="10"/></div>
+        <div class="form-group"><label>Stock Qty</label><input id="f-mstock" type="number" value="100"/></div>
+      </div>`},
+    'add-staff':{title:'Add Staff Member',sub:'Register new hospital staff',html:`
+      <div class="form-grid">
+        <div class="form-group"><label>Full Name</label><input id="f-sname" placeholder="Staff Name"/></div>
+        <div class="form-group"><label>Role</label><select id="f-srole"><option>Nurse</option><option>Lab Technician</option><option>Receptionist</option><option>Admin</option><option>Pharmacist</option></select></div>
+        <div class="form-group"><label>Department</label><select id="f-sdept">${depts.map(d=>`<option>${d}</option>`).join('')}</select></div>
+        <div class="form-group"><label>Phone</label><input id="f-sphone" placeholder="8XXXXXXXXX"/></div>
+        <div class="form-group full"><label>Salary (₹)</label><input id="f-ssal" type="number" value="25000"/></div>
+      </div>`},
+  };
+  const f=forms[type];if(!f)return;
+  const saveKey='save_'+type.replace('add-','');
+  document.getElementById('modal-content').innerHTML=`
+    <div class="modal-header">
+      <div><div class="modal-title">${f.title}</div><div class="modal-subtitle">${f.sub||''}</div></div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    ${f.html}
+    <div class="form-actions">
+      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="${saveKey}()">Save Record</button>
+    </div>`;
+  document.getElementById('modal-overlay').classList.add('open');
+}
+function closeModal(e){
+  if(e&&e.target!==document.getElementById('modal-overlay'))return;
+  document.getElementById('modal-overlay').classList.remove('open');
+}
+
+const v=id=>document.getElementById(id)?.value||'';
+function save_patient(){
+  db.patients.push({id:nextId.p++,name:v('f-name'),dob:v('f-dob'),gender:v('f-gender'),
+    phone:v('f-phone'),email:v('f-email'),address:v('f-addr'),blood:v('f-blood'),
+    reg:new Date().toISOString().split('T')[0]});closeModal();renderAll();
+}
+function save_doctor(){
+  db.doctors.push({id:nextId.d++,name:v('f-dname'),spec:v('f-spec'),dept:v('f-ddept'),phone:v('f-dphone'),avail:v('f-avail')});
+  closeModal();renderAll();
+}
+function save_appt(){
+  db.appointments.push({id:nextId.a++,patientId:+v('f-appt-p'),doctorId:+v('f-appt-d'),
+    date:v('f-appt-date'),time:v('f-appt-time'),reason:v('f-appt-reason'),status:'Scheduled'});
+  closeModal();renderAll();
+}
+function save_pres(){
+  const cid=+v('f-pr-id');
+  if(!cid){alert('Please enter a Prescription ID.');return;}
+  if(db.prescriptions.find(x=>x.id===cid)){alert('ID '+cid+' already exists.');return;}
+  db.prescriptions.push({id:cid,patientId:+v('f-pr-p'),doctorId:+v('f-pr-d'),
+    medId:+v('f-pr-m'),dosage:v('f-pr-dosage'),days:+v('f-pr-days'),
+    date:new Date().toISOString().split('T')[0]});
+  closeModal();renderAll();
+}
+function save_room(){
+  db.rooms.push({id:nextId.r++,num:v('f-rnum'),type:v('f-rtype'),status:'Available',rate:+v('f-rrate')});
+  closeModal();renderAll();
+}
+function save_admission(){
+  const roomId=+v('f-ad-r');
+  db.admissions.push({id:nextId.ad++,patientId:+v('f-ad-p'),doctorId:+v('f-ad-d'),
+    roomId,admit:v('f-ad-date'),discharge:'',diagnosis:v('f-ad-diag'),status:'Admitted'});
+  const r=db.rooms.find(r=>r.id===roomId);if(r)r.status='Occupied';
+  closeModal();renderAll();
+}
+function save_bill(){
+  db.bills.push({id:nextId.b++,patientId:+v('f-b-p'),
+    room:+v('f-b-room'),med:+v('f-b-med'),doc:+v('f-b-doc'),other:+v('f-b-other'),status:v('f-b-status')});
+  closeModal();renderAll();
+}
+function save_med(){
+  db.medicines.push({id:nextId.m++,name:v('f-mname'),cat:v('f-mcat'),price:+v('f-mprice'),stock:+v('f-mstock')});
+  closeModal();renderAll();
+}
+function save_staff(){
+  db.staff.push({id:nextId.s++,name:v('f-sname'),role:v('f-srole'),dept:v('f-sdept'),phone:v('f-sphone'),salary:+v('f-ssal')});
+  closeModal();renderAll();
+}
+
+document.getElementById('current-date').textContent=
+  new Date().toLocaleDateString('en-IN',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+renderAll();
+</script>
+
+
+</body></html>
